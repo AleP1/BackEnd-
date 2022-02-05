@@ -1,37 +1,32 @@
-const http = require("http");
-const moment = require("moment");
+const express = require("express");
+const app = express();
+const Contenedor = require("./contenedor.js");
 
-let visits = 0;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const server = http.createServer((req, res) => {
-  if (req.url === "/") {
-    const hora = moment().format("HH");
-    console.log(hora);
-    if (hora >= 6 && hora < 12) {
-      res.write("Buenos dias!!");
-    } else if (hora >= 13 && hora < 19) {
-      res.write("Buenos tardes!!");
-    } else {
-      res.write("Buenos noches!!");
-    }
-    res.end();
-  }
-  if (req.url === "/world") {
-    res.write("hola mundo");
-    res.end();
-  }
-  if (req.url === "/api") {
-    res.write(JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]));
-    res.end();
-  }
-  if (req.url === "/visitas") {
-    visits++;
-    res.write(`Total de visitas ${visits}`);
-    res.end();
-  }
+const relativePath = "\\productos.txt";
+const absolutePath = __dirname.toString().concat(relativePath);
+
+const items = new Contenedor(absolutePath);
+
+app.get("/", (req, res) => {
+  res.send("Hello");
 });
 
-const PORT = process.env.PORT || 8080;
-server.listen(PORT);
+app.get("/productos", async (req, res) => {
+  res.send(JSON.stringify(await items.getAll()));
+});
 
-console.log(`Escuchando puerto ${PORT}`);
+app.get("/productoRandom", async (req, res) => {
+  const objectArrayLength = await items.objectArray.length;
+  console.log(objectArrayLength);
+  const randomItem = (min, max) => {
+    return Math.random() * (max - min) + min;
+  };
+  const itemsLength = objectArrayLength + 1;
+  const id = parseInt(randomItem(1, itemsLength));
+  res.send(items.getById(id));
+});
+
+app.listen(8080, () => console.log("escuchando en puerto 8080"));
