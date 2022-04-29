@@ -1,0 +1,1 @@
+[{"title":"Escuadra","price":300,"thumbnail":"","id":1},{"title":"Calculadora","price":4500,"thumbnail":"https://upload.wikimedia.org/wikipedia/commons/c/cb/Casio_fx-85WA_20050529.jpg","id":2},{"title":"Globo terraqueo","price":7200,"thumbnail":"https://http2.mlstatic.com/D_NQ_NP_926873-MLA43786618401_102020-O.jpg","id":3}]
